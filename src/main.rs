@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use game::{
+use snake_game::{
     handle_player_input,
     move_snake,
     project_positions,
