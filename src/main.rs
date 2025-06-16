@@ -1,11 +1,13 @@
 use bevy::prelude::*;
 use snake_game::{
     handle_player_input,
-    move_snake,
+    move_snake_head,
     project_positions,
     spawn_camera,
     spawn_snake,
     wrap_snake_position,
+    test_position,
+    move_snake_body,
 };
 fn main() {
     let mut app=App::new();
@@ -14,11 +16,14 @@ fn main() {
             spawn_camera,
             spawn_snake,
         ))
+        // 确保系统执行顺序
         .add_systems(Update, (
-            move_snake,
-            handle_player_input.after(move_snake),
-            project_positions.after(handle_player_input),
+            handle_player_input,
             wrap_snake_position,
-        ));
+            move_snake_body,
+            move_snake_head.after(move_snake_body),
+            project_positions.after(move_snake_head),
+            test_position,
+        ).chain());
     app.run();
 }
